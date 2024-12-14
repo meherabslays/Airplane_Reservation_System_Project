@@ -1,7 +1,3 @@
-Here’s the complete **README** content entirely in **Markdown** format:
-
----
-
 # ✈️ Airline Reservation System
 
 ## 📖 Overview
@@ -94,11 +90,6 @@ Airplane_Reservation_System_Project/
 ## 📸 Demo
 
 - **GitHub Repository**: [Airline Reservation System Project](https://github.com/meherabslays/Airplane_Reservation_System_Project)
-- **Live Demo**: Add a link to your live hosted project if applicable.
-- **Screenshots**:
-  ![Passenger Dashboard](https://via.placeholder.com/800x400?text=Passenger+Dashboard)
-  ![Admin Dashboard](https://via.placeholder.com/800x400?text=Admin+Dashboard)
-
 ---
 
 ## 📝 How to Use
@@ -123,26 +114,6 @@ Airplane_Reservation_System_Project/
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! If you’d like to contribute, follow these steps:
-1. Fork the repository.
-2. Create a new branch:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-3. Commit your changes:
-   ```bash
-   git commit -m "Add your feature"
-   ```
-4. Push to the branch:
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-5. Open a Pull Request.
-
----
-
 ## 🛡️ License
 
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
@@ -153,8 +124,6 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 
 - **Author**: Meherab Slays
 - **GitHub**: [Meherab Slays](https://github.com/meherabslays)
-- **Email**: Add your email address here.
+- **Email**: meherab.csecu@gmail.com.
 
 ---
-
-Copy and paste this Markdown file into your `README.md`. Let me know if you’d like further adjustments!
