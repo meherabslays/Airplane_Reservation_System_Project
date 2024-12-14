@@ -1,0 +1,254 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /*background: linear-gradient(135deg, #e8eff1, #dbe6f3);*/
+    color: #333;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background: url('logo/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Header Section */
+header {
+    width: 100%;
+    background-color: #2e3141;
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header .logo h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+
+
+/*new*/
+
+/* Logo Section */
+.logo h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Button Container */
+.button-container {
+    display: flex;
+    gap: 15px;
+}
+
+/* General Button Styling */
+.btn {
+    padding: 12px 25px; /* Slightly larger for better clickability */
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    background-color: #34495e; /* Neutral dark blue */
+    border: none;
+    border-radius: 50px; /* Circular style */
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #2c3e50; /* Slightly darker on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px); /* Subtle lift effect */
+}
+
+.btn:active {
+    transform: translateY(0); /* Reset lift on click */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Specific Button Types (Optional Customization) */
+.home-btn {
+    background-color: #1abc9c; /* Teal */
+}
+
+.home-btn:hover {
+    background-color: #16a085;
+}
+
+.logout-btn {
+    background-color: #1abc9c; 
+}
+
+.logout-btn:hover {
+    background-color: #16a085;
+}
+
+
+
+
+
+
+
+
+/* Main Dashboard */
+.dashboard {
+    margin-top: 120px; /* To avoid overlap with the fixed header */
+    width: 100%;
+    max-width: 1200px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* Profile Information Section */
+.profile-info {
+    background-color: #FFF5E1;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: transform 0.3s ease;
+}
+
+.profile-info:hover {
+    transform: translateY(-5px);
+}
+
+.profile-info h2 {
+    font-size: 1.8rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.profile-info p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Booking Management Section */
+.booking-management {
+    background-color: #FFF5E1;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.booking-management:hover {
+    transform: translateY(-5px);
+}
+
+.booking-management h2 {
+    font-size: 1.8rem;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+#bookingTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#bookingTable thead {
+    background-color: #008080;
+    color: white;
+}
+
+#bookingTable th, #bookingTable td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+#bookingTable th {
+    font-weight: bold;
+}
+
+/* Ensure no hover effect for the 'Loading bookings...' row */
+#bookingTable tbody tr:first-child:hover {
+    background-color: transparent; /* Remove any background change */
+    cursor: default; /* Keep the default cursor */
+    color: inherit; /* Ensure the text color remains the same */
+}
+
+#bookingTable tr:hover {
+    background-color: #333333;
+}
+
+.booking-management button {
+    background-color: #007BFF;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.booking-management button:hover {
+    background-color: #0056b3;
+}
+
+/* Footer Section */
+footer {
+    width: 100%;
+    background-color: #1d1f27;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    font-size: 1rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard {
+        padding: 20px;
+    }
+
+    .profile-info, .booking-management {
+        padding: 20px;
+    }
+
+    header {
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    header .logo h1 {
+        font-size: 1.6rem;
+    }
+
+    .profile-info h2, .booking-management h2 {
+        font-size: 1.6rem;
+    }
+
+    .booking-management button {
+        font-size: 1rem;
+    }
+}
