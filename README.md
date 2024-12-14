@@ -43,4 +43,5 @@ The **Airline Reservation System** is a full-stack web application designed for 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/airline-reservation-system.git
+   git clone https://github.com/meherabslays/Airplane_Reservation_System_Project.git
+
