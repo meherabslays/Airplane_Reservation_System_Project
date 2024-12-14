@@ -105,10 +105,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-CREATE USER IF NOT EXISTS 'meherab'@'localhost' IDENTIFIED BY 'meherab@7577';
-GRANT ALL PRIVILEGES ON airline_reservation_system.* TO 'meherab'@'localhost';
-FLUSH PRIVILEGES;
-
 DROP TABLE IF EXISTS Payments;
 DROP TABLE IF EXISTS Reservations;
 DROP TABLE IF EXISTS Users;
