@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Airline Reservation System</title>
+    <style>
+        .page {
+            display: none;
+        }
+
+        .active {
+            display: block;
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="logo/logo.png" alt="Airline Logo">
+            <h1>Astra Flights</h1>
+        </div>
+
+        <nav>
+            <button id="choose-flight-button" onclick="showFlightCards()">Choose Flight</button>
+            <button id="search-flight-button" onclick="showSearchFlightsForm()">Search Flights</button>
+            <button id="add-flight-button" onclick="showAddFlightForm()">Book Flight</button>
+        </nav>
+
+
+
+
+
+        <!-- Profile Button (circle) -->
+        <button id="profile-button" onclick="showProfileMenu()">P</button>
+        <!-- You can replace 'P' with an icon or text -->
+    </header>
+    <!-- Profile Menu -->
+    <div id="profile-menu" class="profile-menu">
+        <div class="profile-header">
+            <h3>Passenger Profile</h3>
+        </div>
+        <div class="profile-details">
+            <p><strong>Name:</strong> <span id="user-name">Loading...</span></p>
+            <p><strong>Email:</strong> <span id="user-email">Loading...</span></p>
+            <button onclick="redirectToDashboard()">Go to Dashboard</button>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Welcome Section -->
+    <section id="welcome-section" class="container">
+        <h2>Welcome to Astra Flights</h2>
+        <p>You're now ready to search and book your next flight!</p>
+        <p>You can now search for available flights and book your tickets right here.</p>
+        <button onclick="showLandingPage()">Get Started</button>
+    </section>
+
+    <!-- Landing Section -->
+    <section id="landing-section" class="container" style="display: none;">
+        <h2>What would you like to do?</h2>
+        <div class="button-group">
+            <button id="choose-flight-button" onclick="showFlightCards()">Choose Flight</button>
+            <button id="search-flight-button" onclick="showSearchFlightsForm()">Search Flights</button>
+            <button id="add-flight-button" onclick="showAddFlightForm()">Add Flight</button>
+
+        </div>
+    </section>
+
+    <!-- Flight Cards Section (Initially Hidden) -->
+    <section id="flight-cards-section" class="container" style="display:none;">
+        <h2>Available Flights</h2>
+        <div id="flight-cards-container" class="flight-cards-container">
+            <!-- Flight cards will be dynamically inserted here -->
+        </div>
+    </section>
+
+
+
+
+
+
+
+    <!-- Forms Section -->
+    <section id="forms-section" class="container" style="display: none;">
+        <!-- Registration Form -->
+        <div id="register-form" class="form-container" style="display: none;">
+            <h3>Register</h3>
+            <form id="register">
+                <input type="text" id="first_name" placeholder="First Name" required>
+                <input type="text" id="last_name" placeholder="Last Name" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="text" id="phone" placeholder="Phone Number" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login-form" class="form-container" style="display: none;">
+            <h3>Login</h3>
+            <form id="login">
+                <input type="email" id="login_email" name="email" placeholder="Email" required>
+                <input type="password" id="login_password" name="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+    </section>
+
+
+
+
+
+
+
+
+    <!-- Flight Creation Form -->
+    <div id="flight-form" class="container form-container" style="display:none;">
+        <h2>Book Flight</h2>
+        <p style="color: #cecbcb; font-size: 1rem; margin-bottom: 20px; text-align: center;">
+            Ready for takeoff? Fill out the details below to add a new flight to the system.
+            Make sure all information is accurate to ensure smooth operations and happy travelers!
+        </p>
+        <form id="add-flight" style="max-width: 500px; margin: 0 auto;">
+            <!-- Flight Number -->
+            <div class="form-group">
+                <label for="flight_number">Flight Number</label>
+                <input type="text" id="flight_number" placeholder="e.g., AW123" required>
+            </div>
+
+            <!-- Origin -->
+            <div class="form-group">
+                <label for="origin">Origin</label>
+                <input type="text" id="origin" placeholder="e.g., New York" required>
+            </div>
+
+            <!-- Destination -->
+            <div class="form-group">
+                <label for="destination">Destination</label>
+                <input type="text" id="destination" placeholder="e.g., London" required>
+            </div>
+
+            <!-- Departure Time -->
+            <div class="form-group">
+                <label for="departure_time">Departure Time</label>
+                <input type="datetime-local" id="departure_time" required>
+            </div>
+
+            <!-- Arrival Time -->
+            <div class="form-group">
+                <label for="arrival_time">Arrival Time</label>
+                <input type="datetime-local" id="arrival_time" required>
+            </div>
+
+            <!-- Price -->
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="number" id="price" placeholder="e.g., 250" required>
+            </div>
+
+            <!-- Seats Available -->
+            <div class="form-group">
+                <label for="seats_available">Seats Available</label>
+                <input type="number" id="seats_available" placeholder="e.g., 150" required>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit">Book Flight</button>
+            <p style="color: #a7a3a3; font-size: 0.85rem;">
+                ✈ Make sure the skies are clear, and your data is perfect before hitting 'Book Flight'!
+            </p>
+        </form>
+    </div>
+
+    <!-- Search Flights Form -->
+    <div id="searchFlightForm" class="container" style="display:none;">
+        <h2>Search Flights</h2>
+        <form id="flight-search-form">
+            <label for="search-origin">Origin</label>
+            <input type="text" id="search-origin" name="origin" placeholder="Enter departure city" required>
+
+            <label for="search-destination">Destination</label>
+            <input type="text" id="search-destination" name="destination" placeholder="Enter arrival city" required>
+
+            <label for="search-travel_date">Date of Travel</label>
+            <input type="date" id="search-travel_date" name="travel_date" required min="2024-01-01">
+
+            <label for="search-passengers">Number of Passengers</label>
+            <input type="number" id="search-passengers" name="passengers" min="1" max="10"
+                placeholder="Enter number of passengers" required>
+
+            <button type="button" onclick="searchedFlight()">Search Flights</button>
+        </form>
+
+        <section id="fetched-specific-card-section" class="fetched-container" style="display:none;">
+            <h2>Matched Flights</h2>
+            <div id="fetched-specific-card-container" class="fetched-flight-cards-container">
+                <!-- Fetched flight cards will be dynamically inserted here -->
+            </div>
+        </section>
+    </div>
+
+
+
+
+
+
+
+
+
+<!------------------------------------------------------------------>
+
+
+    <script src="app.js"></script>
+</body>
+<script>
+
+    //Card section visibility:
+    // Function to toggle visibility of sections
+    function toggleSections(showSectionId) {
+        // IDs of all sections
+        const sections = [
+            'welcome-section',
+            'landing-section',
+            'flight-cards-section',
+            'flight-form',
+            'searchFlightForm'
+        ];
+
+        // Hide all sections
+        sections.forEach(sectionId => {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.style.display = 'none';
+            }
+        });
+
+        // Show the specified section
+        const sectionToShow = document.getElementById(showSectionId);
+        if (sectionToShow) {
+            sectionToShow.style.display = 'block';
+        }
+    }
+
+    // Function to handle "Choose Flight" button click
+    function showFlightCards() {
+        toggleSections('flight-cards-section');
+    }
+
+    // Function to handle "Search Flights" button click
+    function showSearchFlightsForm() {
+        toggleSections('searchFlightForm');
+    }
+
+    // Function to handle "Add Flight" button click
+    function showAddFlightForm() {
+        toggleSections('flight-form');
+    }
+
+    // Function to handle "Get Started" button click in the Welcome Section
+    function showLandingPage() {
+        toggleSections('landing-section');
+    }
+
+    // Optional: Initialize the app by showing both Welcome and Landing Sections
+    function initializeApp() {
+        // Show both Welcome and Landing sections initially
+        document.getElementById('welcome-section').style.display = 'block';
+        // document.getElementById('landing-section').style.display = 'block';
+    }
+
+    // Attach the initialize function to the DOMContentLoaded event
+    document.addEventListener('DOMContentLoaded', initializeApp);
+
+
+    // Function to show/hide the profile menu
+    function showProfileMenu() {
+        const menu = document.getElementById('profile-menu');
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        fetchUserDetails(); // Fetch user details when profile menu is shown
+    }
+
+    // Fetch user details from the server
+    // function fetchUserDetails() {
+    //     fetch('/api/user', {
+    //         method: 'GET',
+    //         credentials: 'same-origin' // Send session cookies with the request
+    //     })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             document.getElementById('user-name').textContent = `${data.first_name} ${data.last_name}`;
+    //             document.getElementById('user-email').textContent = data.email;
+    //         })
+    //         .catch(error => {
+    //             console.error('Error fetching user details:', error);
+    //         });
+    // }
+
+    // Function to redirect user to the passenger dashboard
+    function redirectToDashboard() {
+        window.location.href = 'passengerDash.html'; // Replace 'passengerDash.html' with your actual file name/path
+    }
+
+    // Optional: Function to logout and redirect
+    function logout() {
+        // Add any logout logic here (e.g., clearing cookies, session storage)
+        alert('You have been logged out! Redirecting to the login page.');
+        window.location.href = 'index.html'; // Redirect to the login/index page
+    }
+    //flight card codes :
+    const loginForm = document.getElementById('login');
+
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Prevent default form submission
+
+        const email = document.getElementById('login_email').value;
+        const password = document.getElementById('login_password').value;
+
+        try {
+            const response = await fetch('http://127.0.0.1:3000/login', { // Corrected the backend URL to 3000
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include', // Include cookies in the request
+                body: JSON.stringify({ email, pass: password }),
+            });
+
+            // Check if the response status is not ok
+            if (!response.ok) {
+                const errorText = await response.text(); // Read the raw error message
+                console.error('Error:', errorText);
+                alert(errorText); // Display the error to the user
+                return;
+            }
+
+            // Parse the JSON response
+            const data = await response.json();
+
+            if (data.message === 'Login successful') {
+                window.location.href = data.redirect; // Redirect to the appropriate dashboard
+            } else {
+                console.error('Unexpected message:', data.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred during login.');
+        }
+    });
+
+    // Function to fetch and display flights
+    function fetchAndDisplayFlights() {
+        fetch('http://127.0.0.1:3000/api/flight-card-fetch')  // Updated endpoint to fetch flight cards
+            .then(response => response.json())  // Parse the response as JSON
+            .then(data => {
+                const flightCardsContainer = document.getElementById('flight-cards-container');  // Get the container for flight cards
+                flightCardsContainer.innerHTML = '';  // Clear any existing cards
+
+                data.forEach(flight => {
+                    const flightCard = document.createElement('div');  // Create a new flight card
+                    flightCard.classList.add('flight-card');  // Add the flight-card class
+
+                    // Airline Name
+                    const airlineName = document.createElement('h3');
+                    airlineName.textContent = flight.airline_name;
+                    flightCard.appendChild(airlineName);
+
+                    // Origin and Destination
+                    const route = document.createElement('p');
+                    route.textContent = `From: ${flight.origin} to ${flight.destination}`;
+                    flightCard.appendChild(route);
+
+                    // Departure Time (Formatted)
+                    const departureTime = document.createElement('p');
+                    departureTime.textContent = `Departure: ${formatDate(flight.departure_time)}`;  // Format the departure time
+                    flightCard.appendChild(departureTime);
+
+                    // Arrival Time (Formatted)
+                    const arrivalTime = document.createElement('p');
+                    arrivalTime.textContent = `Arrival: ${formatDate(flight.arrival_time)}`;  // Format the arrival time
+                    flightCard.appendChild(arrivalTime);
+
+                    // Price
+                    const price = document.createElement('p');
+                    price.classList.add('price');
+                    price.textContent = `৳${flight.price}`;
+                    flightCard.appendChild(price);
+
+                    // Book Now Button
+                    const bookNowButton = document.createElement('button');
+                    bookNowButton.textContent = 'Book Now';
+                    // Add functionality to the button here if needed
+                    flightCard.appendChild(bookNowButton);
+
+                    // Append the flight card to the container
+                    flightCardsContainer.appendChild(flightCard);
+                });
+
+                // Show the flight cards section once data is loaded
+                //document.getElementById('flight-cards-section').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error fetching flights:', error);
+                alert('Error fetching flight data.');
+            });
+    }
+
+    // Show the flight cards section when the "Choose Flight" button is clicked
+    document.getElementById('choose-flight-button').addEventListener('click', function () {
+        document.getElementById('flight-cards-section').style.display = 'block';
+    });
+
+    // Call the function to fetch and display flights when the page loads
+    window.onload = function () {
+        fetchAndDisplayFlights();
+    };
+
+    // Helper function to format date
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleString();  // Converts the date to a human-readable string
+    }
+
+
+    //Show searched flight card 
+    function searchedFlight() {
+        // Get the form values
+        const origin = document.getElementById('search-origin').value; // Get the origin value
+        const destination = document.getElementById('search-destination').value; // Get the destination value
+        const travelDate = document.getElementById('search-travel_date').value; // Get the travel date value
+        const passengers = document.getElementById('search-passengers').value; // Get the number of passengers value
+
+        // Validate input fields
+        if (!origin || !destination || !travelDate || !passengers) {
+            alert('Please fill in all fields.');
+            return;
+        }
+
+        // Send the search parameters to the backend to fetch matching flights
+        fetch('http://127.0.0.1:3000/api/searched-flight-card', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                origin,
+                destination,
+                travel_date: travelDate,
+                passengers: passengers // Adding the passengers count to the request
+            })
+        })
+            .then(response => response.json()) // Parse the response as JSON
+            .then(data => {
+                const flightCardsContainer = document.getElementById('fetched-specific-card-container'); // Get the container for flight cards
+                flightCardsContainer.innerHTML = ''; // Clear any existing cards
+
+                if (data.length === 0) {
+                    // If no matching flights are found, display a message
+                    const noResultsMessage = document.createElement('p');
+                    noResultsMessage.textContent = 'No matching flights found.';
+                    flightCardsContainer.appendChild(noResultsMessage);
+                } else {
+                    // Loop through the flight data and create cards dynamically
+                    data.forEach(flight => {
+                        const flightCard = document.createElement('div'); // Create a new flight card
+                        flightCard.classList.add('fetched-flight-card'); // Add the appropriate class for styling
+
+                        // Airline Name
+                        const airlineName = document.createElement('h3');
+                        airlineName.textContent = `${flight.airline_name}`;
+                        flightCard.appendChild(airlineName);
+
+                        // Origin and Destination
+                        const route = document.createElement('p');
+                        route.textContent = `From: ${flight.origin} to ${flight.destination}`;
+                        flightCard.appendChild(route);
+
+                        // Departure Time (Formatted)
+                        const departureTime = document.createElement('p');
+                        departureTime.textContent = `Departure: ${formatDate(flight.departure_time)}`; // Format the departure time
+                        flightCard.appendChild(departureTime);
+
+                        // Arrival Time (Formatted)
+                        const arrivalTime = document.createElement('p');
+                        arrivalTime.textContent = `Arrival: ${formatDate(flight.arrival_time)}`; // Format the arrival time
+                        flightCard.appendChild(arrivalTime);
+
+                        // Price
+                        const price = document.createElement('p');
+                        price.classList.add('price');
+                        price.textContent = `Price: ৳${flight.price}`;
+                        flightCard.appendChild(price);
+
+                        // Seats Available
+                        const seatsAvailable = document.createElement('p');
+                        seatsAvailable.textContent = `Seats Available: ${flight.seats_available}`;
+                        flightCard.appendChild(seatsAvailable);
+
+                        // Book Now Button
+                        const bookNowButton = document.createElement('button');
+                        bookNowButton.textContent = 'Book Now';
+                        bookNowButton.onclick = function () {
+                            bookFlight(flight.flight_id);  // Book flight by ID
+                        };
+                        flightCard.appendChild(bookNowButton);
+
+                        // Append the created flight card to the container
+                        flightCardsContainer.appendChild(flightCard);
+                    });
+                }
+                // Make the section visible after the results are processed
+                document.getElementById('fetched-specific-card-section').style.display = 'block';  // Show the section
+
+            })
+            .catch(error => {
+                console.error('Error fetching flights:', error);
+                alert('Error fetching flight data.');
+            });
+    }
+
+    // Helper function to format date
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleString();  // Converts the date to a human-readable string
+    }
+
+    // Function to handle flight booking
+    function bookFlight(flightId) {
+        // Add functionality to book the flight based on the flight ID
+        console.log('Booking flight ID:', flightId);
+    }
+
+
+
+</script>
+
+</html>
