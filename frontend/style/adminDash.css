@@ -1,0 +1,250 @@
+/* Basic Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f1f1f1, #dfe4ea);
+    color: #333;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: url('logo/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #1d1f27;
+    color: white;
+    padding: 15px 30px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.navbar-links li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+    padding: 12px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.navbar-links li a:hover {
+    background-color: #4e7cfa;
+    transform: scale(1.1) rotate(-2deg);
+}
+
+
+
+
+
+/* Footer Section */
+footer {
+    width: 100%;
+    background-color: #1d1f27;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    font-size: 1rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+/* Main Content */
+.content {
+    margin-top: 100px;
+    /* Adjust to ensure navbar doesn't overlap content */
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    /* Limits content width for better presentation */
+}
+
+.content .section {
+    background-color: #FFF5E1;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    width: 100%;
+    max-width: 100%;
+    /* Limiting width of sections */
+    margin-bottom: 30px;
+    /* Space between sections */
+    overflow-x: auto;
+}
+
+.content .section:hover {
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
+    transform: translateY(-10px);
+}
+
+h3 {
+    font-size: 1.7rem;
+    margin-bottom: 15px;
+    color: #2d2f36;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th,
+table td {
+    padding: 15px;
+    border: 1px solid #f1f1f1;
+    text-align: left;
+}
+
+table th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: bold;
+}
+
+table td {
+    background-color: #ffffff;
+    color: #6c757d;
+}
+
+button {
+    background-color: #007BFF;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Floating Action Button (FAB) */
+.fab-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #007BFF;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 50%;
+    font-size: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.fab-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
+}
+
+/* Form Fields */
+form input[type="text"],
+form input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+form button {
+    margin-top: 10px;
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    background-color: #28a745;
+    border-radius: 6px;
+}
+
+/* Form Labels and Inputs */
+form label {
+    display: block; /* Makes sure labels take full width and stack above inputs */
+    margin-bottom: 5px; /* Adds space between label and input */
+    font-weight: 600;
+}
+
+form input {
+    display: block; /* Ensures inputs are displayed in block form, stacked vertically */
+    width: 100%; /* Ensures the input takes up full width of its container */
+    padding: 12px;
+    margin-bottom: 10px; /* Adds space between inputs */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+
+
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navbar-links {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .content {
+        padding: 20px;
+    }
+
+    .section {
+        padding: 15px;
+    }
+
+    .fab-button {
+        bottom: 20px;
+        right: 20px;
+    }
+}
