@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passenger Dashboard</title>
+    <link rel="stylesheet" href="passengerDash.css">
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            <h1>Passenger Dashboard</h1>
+        </div>
+        <div class="button-container">
+            <!-- Home Button -->
+            <button class="btn home-btn" onclick="goHome()">Home</button>
+            <!-- Logout Button -->
+            <button class="btn logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </header>
+
+
+    <!-- Main Dashboard -->
+    <div class="dashboard">
+        <!-- Profile Information -->
+        <section class="profile-info">
+            <h2>Welcome, <span id="userName">Loading...</span></h2>
+            <p>Email: <span id="userEmail">Loading...</span></p>
+            <p>Phone: <span id="userPhone">Loading...</span></p>
+        </section>
+
+        <!-- Booking Management -->
+        <section class="booking-management">
+            <h2>Your Bookings</h2>
+            <table id="bookingTable">
+                <thead>
+                    <tr>
+                        <th>Flight #</th>
+                        <th>Route</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="5">Loading bookings...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Airline Reservation System</p>
+    </footer>
+
+    <!-- Embedded JavaScript -->
+    <script>
+        // Fetch Profile Information
+        function fetchProfile() {
+            fetch('/api/profile', { method: 'GET', credentials: 'include' })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('userName').innerText = data.name;
+                    document.getElementById('userEmail').innerText = data.email;
+                    document.getElementById('userPhone').innerText = data.phone;
+                })
+                .catch(error => {
+                    console.error('Error fetching profile:', error);
+                });
+        }
+
+        // Fetch Booking Information
+        function fetchBookings() {
+            fetch('/api/bookings', { method: 'GET', credentials: 'include' })
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('#bookingTable tbody');
+                    tableBody.innerHTML = ''; // Clear loading message
+                    if (data.length === 0) {
+                        tableBody.innerHTML = '<tr><td colspan="5">No bookings found.</td></tr>';
+                    } else {
+                        data.forEach(booking => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${booking.flightNumber}</td>
+                                <td>${booking.route}</td>
+                                <td>${booking.date}</td>
+                                <td>${booking.status}</td>
+                                <td>
+                                    <button onclick="modifyBooking(${booking.id})">Modify</button>
+                                    <button onclick="cancelBooking(${booking.id})">Cancel</button>
+                                </td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching bookings:', error);
+                });
+        }
+
+        // Modify Booking
+        function modifyBooking(bookingId) {
+            const confirmation = confirm('Do you want to modify this booking?');
+            if (confirmation) {
+                // Redirect or open a form for modification
+                window.location.href = `/modify-booking.html?bookingId=${bookingId}`;
+            }
+        }
+
+        // Cancel Booking
+        function cancelBooking(bookingId) {
+            const confirmation = confirm('Are you sure you want to cancel this booking?');
+            if (confirmation) {
+                fetch(`/api/bookings/${bookingId}`, { method: 'DELETE', credentials: 'include' })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('Booking canceled successfully.');
+                            fetchBookings(); // Refresh bookings
+                        } else {
+                            alert('Failed to cancel booking.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error canceling booking:', error);
+                    });
+            }
+        }
+
+        // Logout Functionality
+        function logout() {
+            fetch('/api/logout', { method: 'POST', credentials: 'include' })
+                .then(() => {
+                    window.location.href = 'index.html';
+                })
+                .catch(error => {
+                    console.error('Error logging out:', error);
+                });
+        }
+
+        // Home Button Functionality
+        function goHome() {
+            // Perform any required operations here before redirecting
+            window.location.href = 'index2.html';  // Redirect to index2.html
+        }
+
+        // // Initialize Dashboard
+        // document.addEventListener('DOMContentLoaded', () => {
+        //     fetchProfile();
+        //     fetchBookings();
+        // });
+    </script>
+</body>
+
+</html>
