@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="adminDash.css">
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <h2>Admin Dashboard</h2>
+      <ul class="navbar-links">
+        <li><a href="#" onclick="showSection('view-flights-section')">View Flights</a></li>
+        <li><a href="#" onclick="showSection('add-flight-section')">Add Flight</a></li>
+        <li><a href="#" onclick="showSection('manage-bookings-section')">Manage Bookings</a></li>
+        <li><a href="#" onclick="showSection('update-prices-section')">Update Prices</a></li>
+        <!-- Logout Button -->
+        <li><a href="#" id="logout-link">Logout</a></li>
+
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <div class="content">
+    <!-- View Flights Section -->
+    <div class="section" id="view-flights-section">
+      <h3>View All Flights</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Flight ID</th>
+            <th>Flight Number</th>
+            <th>Airline Name</th>
+            <th>Origin</th>
+            <th>Destination</th>
+            <th>Departure</th>
+            <th>Arrival</th>
+            <th>Price</th>
+            <th>Seats Available</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="flights-list">
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Add Flight Section (Initially Hidden) -->
+    <div class="section" id="add-flight-section" hidden>
+      <h3>Add New Flight</h3>
+      <form id="add-flight-form">
+        <label for="flight-number">Flight Number:</label>
+        <input type="text" id="flight-number" required>
+
+        <label for="airline-name">Airline Name:</label>
+        <input type="text" id="airline-name" required>
+
+        <label for="origin">Origin (Departure City):</label>
+        <input type="text" id="origin" required>
+
+        <label for="destination">Destination (Arrival City):</label>
+        <input type="text" id="destination" required>
+
+        <label for="departure-time">Departure Time:</label>
+        <input type="datetime-local" id="departure-time" required>
+
+        <label for="arrival-time">Arrival Time:</label>
+        <input type="datetime-local" id="arrival-time" required>
+
+        <label for="price">Price:</label>
+        <input type="number" id="price" step="0.01" required>
+
+        <label for="seats">Seats Available:</label>
+        <input type="number" id="seats" required>
+
+        <button type="submit">Add Flight</button>
+      </form>
+    </div>
+
+
+    <!-- Manage Bookings Section -->
+    <div class="section" id="manage-bookings-section">
+      <h3>Manage Bookings</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Booking ID</th>
+            <th>Flight Number</th>
+            <th>Passenger</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="bookings-list">
+          <!-- Booking data will be populated here via JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Update Prices Section (Initially Hidden) -->
+    <div class="section" id="update-prices-section" hidden>
+      <h3>Update Ticket Prices</h3>
+      <form id="update-price-form">
+        <label for="flight-id">Flight ID:</label>
+        <input type="number" id="flight-id-price" required>
+        <label for="new-price">New Price:</label>
+        <input type="number" id="new-price" required>
+        <button type="submit">Update Price</button>
+      </form>
+    </div>
+  </div>
+
+
+  <script>
+
+  </script>
+  <footer>
+    <p>&copy; 2024 Airline Reservation System</p>
+  </footer>
+</body>
+
+
+<script>
+  // Function to handle flight form submission
+  document.getElementById('add-flight-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const flightNumber = document.getElementById('flight-number').value;
+    const airlineName = document.getElementById('airline-name').value;
+    const departure = document.getElementById('origin').value;
+    const arrival = document.getElementById('destination').value;
+    const price = parseFloat(document.getElementById('price').value);
+    const seats = parseInt(document.getElementById('seats').value, 10);
+
+    const departureTimeInput = document.getElementById('departure-time').value;
+    const arrivalTimeInput = document.getElementById('arrival-time').value;
+
+    // Add ':00' for seconds and replace 'T' with space
+    const departureTime = departureTimeInput.replace('T', ' ') + ":00";
+    const arrivalTime = arrivalTimeInput.replace('T', ' ') + ":00";
+
+    // Validate dates
+    if (isNaN(new Date(departureTime).getTime()) || isNaN(new Date(arrivalTime).getTime())) {
+      alert('Invalid date or time. Please check your inputs.');
+      return;
+    }
+
+    if (new Date(departureTime) >= new Date(arrivalTime)) {
+      alert('Departure time must be earlier than arrival time.');
+      return;
+    }
+
+    // Validate numeric inputs
+    if (isNaN(price) || price <= 0) {
+      alert('Price must be a positive number.');
+      return;
+    }
+
+    if (isNaN(seats) || seats <= 0) {
+      alert('Seats must be a positive integer.');
+      return;
+    }
+
+    // Prepare flight data object
+    const flightData = {
+      flight_number: flightNumber,
+      airline_name: airlineName,
+      origin: departure,
+      destination: arrival,
+      departure_time: departureTime,
+      arrival_time: arrivalTime,
+      price: price,
+      seats_available: seats,
+    };
+
+    // Make API call to add flight
+    fetch('http://127.0.0.1:3000/api/add-flight', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(flightData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message) {
+          alert('Flight added successfully!');
+          showSection('view-flights-section');
+          fetchAndDisplayFlights();
+        } else {
+          alert(data.error || 'Failed to add flight');
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        alert('Error adding flight');
+      });
+  });
+
+  //showing data in the view flights table:
+  // Function to format the date in the desired format: YYYY-MM-DD HH:mm:ss
+  function formatDate(date) {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0'); // Get month and pad with zero if needed
+    const day = String(d.getDate()).padStart(2, '0'); // Get day and pad with zero if needed
+    const hours = String(d.getHours()).padStart(2, '0'); // Get hours and pad with zero if needed
+    const minutes = String(d.getMinutes()).padStart(2, '0'); // Get minutes and pad with zero if needed
+    const seconds = String(d.getSeconds()).padStart(2, '0'); // Get seconds and pad with zero if needed
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`; // Return the formatted date
+  }
+
+  // Function to delete a flight
+  function deleteFlight(flightId) {
+    console.log("Deleting flight with ID:", flightId);  // Log the flightId to debug
+
+    // Make a DELETE request to the backend to delete the flight
+    fetch(`http://127.0.0.1:3000/api/delete-flight/${flightId}`, {
+      method: 'DELETE',
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log('Flight deleted successfully.');  // Log success message
+          alert('Flight deleted successfully.');
+          // Reload the flight list after deletion
+          fetchAndDisplayFlights();
+        } else {
+          return response.json();  // Handle error response
+        }
+      })
+      .then((data) => {
+        // if (data && data.message) {
+        //   alert(data.message);  // Show the message from the backend
+        // } else {
+        //   alert('Failed to delete flight.');
+        // }
+        // If deletion is successful, show the success message
+        console.log('Flight deleted successfully.');
+        alert('Flight deleted successfully.');
+        // Reload the flight list after deletion
+        fetchAndDisplayFlights();
+      })
+
+      .catch((error) => {
+        console.error('Error deleting flight:', error);
+        alert('Error deleting flight.');
+      });
+  }
+
+
+  // Function to fetch and display flights
+  function fetchAndDisplayFlights() {
+    fetch('http://127.0.0.1:3000/api/get-flights')  // Endpoint to fetch flights
+      .then(response => response.json())  // Parse the response as JSON
+      .then(data => {
+        const flightsList = document.getElementById('flights-list');  // Get the table body
+        flightsList.innerHTML = '';  // Clear any existing rows
+
+        data.forEach(flight => {
+          const row = document.createElement('tr');  // Create a new table row
+
+          // Flight ID
+          const flightIdCell = document.createElement('td');
+          flightIdCell.textContent = flight.flight_id;  // Assuming flight_id is in the response
+          row.appendChild(flightIdCell);
+
+          // Flight Number
+          const flightNumberCell = document.createElement('td');
+          flightNumberCell.textContent = flight.flight_number;
+          row.appendChild(flightNumberCell);
+
+          // Airline Name
+          const airlineNameCell = document.createElement('td');
+          airlineNameCell.textContent = flight.airline_name;
+          row.appendChild(airlineNameCell);
+
+          // Origin
+          const originCell = document.createElement('td');
+          originCell.textContent = flight.origin;
+          row.appendChild(originCell);
+
+          // Destination
+          const destinationCell = document.createElement('td');
+          destinationCell.textContent = flight.destination;
+          row.appendChild(destinationCell);
+
+          // Departure Time (Formatted)
+          const departureCell = document.createElement('td');
+          departureCell.textContent = formatDate(flight.departure_time);  // Format the departure time
+          row.appendChild(departureCell);
+
+          // Arrival Time (Formatted)
+          const arrivalCell = document.createElement('td');
+          arrivalCell.textContent = formatDate(flight.arrival_time);  // Format the arrival time
+          row.appendChild(arrivalCell);
+
+          // Price
+          const priceCell = document.createElement('td');
+          priceCell.textContent = flight.price;
+          row.appendChild(priceCell);
+
+          // Seats Available
+          const seatsAvailableCell = document.createElement('td');
+          seatsAvailableCell.textContent = flight.seats_available;
+          row.appendChild(seatsAvailableCell);
+
+          // Actions (only Delete button)
+          const actionsCell = document.createElement('td');
+
+          // Delete Button
+          const deleteButton = document.createElement('button');
+          deleteButton.textContent = 'Delete';
+          deleteButton.onclick = function () {
+            deleteFlight(flight.flight_id);  // Delete flight function (to be created)
+          };
+
+          actionsCell.appendChild(deleteButton);
+          row.appendChild(actionsCell);
+
+          // Append the row to the table
+          flightsList.appendChild(row);
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching flights:', error);
+        alert('Error fetching flight data.');
+      });
+  }
+
+  // Call the function to fetch and display flights when the page loads
+  window.onload = function () {
+    fetchAndDisplayFlights();
+  };
+
+
+  // Function to update the ticket price
+  function updateTicketPrice(event) {
+    event.preventDefault(); // Prevent form submission from reloading the page
+
+    const flightId = document.getElementById('flight-id-price').value;
+    const newPrice = document.getElementById('new-price').value;
+
+    // Validate input
+    if (!flightId || !newPrice) {
+      alert('Please provide both Flight ID and New Price.');
+      return;
+    }
+
+    // Update price funcntionality:
+    
+    fetch('http://127.0.0.1:3000/api/update-price', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        flightId: parseInt(flightId),
+        newPrice: parseFloat(newPrice),
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Failed to update price.');
+        }
+      })
+      .then((data) => {
+        alert(data.message); // Show the success message
+        console.log('Price updated successfully:', data);
+        document.getElementById('update-price-form').reset(); // Reset the form
+      })
+      .catch((error) => {
+        console.error('Error updating price:', error);
+        alert('Error updating ticket price.');
+      });
+  }
+
+  // Attach event listener to the form
+  document
+    .getElementById('update-price-form')
+    .addEventListener('submit', updateTicketPrice);
+
+
+
+
+  // Function to show the clicked section and hide others
+  function showSection(sectionId) {
+    // Hide all sections
+    const sections = document.querySelectorAll('.section');
+    sections.forEach(section => {
+      section.setAttribute('hidden', 'true');
+    });
+
+    // Show the selected section
+    const activeSection = document.getElementById(sectionId);
+    if (activeSection) {
+      activeSection.removeAttribute('hidden');
+    }
+  }
+  //logout funtionality:
+  document.addEventListener('DOMContentLoaded', function () {
+    // Ensure the logout button exists before adding the event listener
+    const logoutLink = document.getElementById('logout-link');
+    if (logoutLink) {
+      logoutLink.addEventListener('click', logout);
+    } else {
+      console.error('Logout link not found!');
+    }
+  });
+  function logout() {
+    fetch('/api/logout', { method: 'POST', credentials: 'include' })
+      .then(() => {
+        window.location.href = 'index.html';  // Redirect to index.html after logout
+      })
+      .catch(error => {
+        console.error('Error logging out:', error);
+      });
+  }
+
+</script>
+
+</html>
