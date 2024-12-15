@@ -49,11 +49,6 @@ CREATE TABLE Payments (
     FOREIGN KEY (reservation_id) REFERENCES Reservations(reservation_id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_user_email ON Users(email);
-CREATE INDEX idx_flight_origin ON Flights(origin);
-CREATE INDEX idx_flight_destination ON Flights(destination);
-CREATE INDEX idx_status ON Reservations(status);
-
 DELIMITER $$
 CREATE PROCEDURE create_reservation(IN userId INT, IN flightId INT)
 BEGIN
