@@ -109,17 +109,15 @@ app.post('/login', async (req, res) => {
         phone: user.phone,
       };
 
-      // Logs a message indicating  log in successfull
       console.log(`${email} logged in`);
 
-      // Log session user info
+      
       console.log('Session after login:', req.session.user);
 
       // Define redirect URL based on user role
       let redirectUrl;
       if (user.role === 'customer') {
         redirectUrl = '/passengerDash.html';
-        // Log session user info
         console.log('Session after executing passengerDash ridirection:', req.session.user);
       } else if (user.role === 'admin') {
         redirectUrl = '/adminDash.html';
@@ -145,7 +143,7 @@ app.get("/dashboard", (req, res) => {
     return res.redirect("/login");
   }
 
-  const role = req.session.user.role; // Extract the user's role from the session.
+  const role = req.session.user.role;
 
   if (role === "customer") {
     res.sendFile(path.join(__dirname, "../../Airline_frontend/front_8/", "passengerDash.html"));
@@ -164,7 +162,7 @@ app.get('/api/profile', (req, res) => {
     res.json({
       username: req.session.user.username,
       email: req.session.user.email,
-      phone: req.session.user.phone || 'N/A'  // Handle missing phone number
+      phone: req.session.user.phone || 'N/A'  
     });
   } else {
     res.status(401).json({ error: 'Not logged in' });
@@ -184,7 +182,7 @@ app.get('/api/get-bookings', (req, res) => {
     return res.status(401).json({ message: 'User not logged in' });
   }
 
-  const userId = req.session.user.userId;// Get the logged-in user's ID from session
+  const userId = req.session.user.userId;
   console.log("Fetching bookings for user ID:", userId); 
   const query = `
       SELECT r.reservation_id, r.booking_date, r.status, f.flight_number, f.origin, f.destination
@@ -199,7 +197,7 @@ app.get('/api/get-bookings', (req, res) => {
     }
 
     // Return the bookings data
-    console.log("SQL Query Results:", results); // Debugging
+    console.log("SQL Query Results:", results); 
     return res.json({ bookings: results });
   });
 });
@@ -267,7 +265,7 @@ app.get('/api/admin/bookings', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
 
-    console.log("Query Results:", JSON.stringify(results, null, 2)); // Debugging 
+    console.log("Query Results:", JSON.stringify(results, null, 2)); 
 
     
     res.setHeader('Content-Type', 'application/json');
@@ -288,7 +286,6 @@ app.get('/api/admin/bookings', (req, res) => {
 
 // extraaaaa Backend route to log session data 
 app.get('/api/check-session-1', (req, res) => {
-  // Log session data in the backend terminal
   console.log('Session when passengerDash loads :', req.session.user);
   res.json({ user: req.session.user });
 });
@@ -298,7 +295,6 @@ app.get('/api/check-session-1', (req, res) => {
 
 // extraaaaa Backend route to log session data 
 app.get('/api/check-session', (req, res) => {
-  // Log session data in the backend terminal
   console.log('Session when  index2 loads:', req.session.user);
   res.json({ user: req.session.user });
 });
@@ -356,7 +352,6 @@ app.post('/api/register', (req, res) => {
 
 
 app.post('/api/logout', (req, res) => {
-  // Destroy the session
   console.log('Session before delete and distroy:', req.session.user);
   delete req.session.user;
   console.log('Session after deletion:', req.session.user);
@@ -364,11 +359,8 @@ app.post('/api/logout', (req, res) => {
     if (err) {
       return res.status(500).json({ message: 'Failed to destroy session' });
     }
-    // Log session destruction
     console.log("Session destroyed");
     console.log('Session after destruction:', req.session);
-
-    // Clear the session cookie
     res.clearCookie('connect.sid');
     return res.status(200).json({ message: 'Logged out successfully' });
   });
@@ -525,10 +517,10 @@ app.get('/api/get-flights', (req, res) => {
 
 // Fetch all flights.
 app.get('http://127.0.0.1:3000/api/get-flights', (req, res) => {
-  const query = 'SELECT * FROM Flights'; // SQL query to fetch all flights from the Flights table.
+  const query = 'SELECT * FROM Flights'; 
   db.query(query, (err, results) => {
-    if (err) return res.status(500).json({ error: 'Error fetching flights' }); // Handles query errors.
-    res.status(200).json(results); // Sends the list of flights in the response if successful.
+    if (err) return res.status(500).json({ error: 'Error fetching flights' }); 
+    res.status(200).json(results); 
   });
 });
 
@@ -536,7 +528,7 @@ app.get('http://127.0.0.1:3000/api/get-flights', (req, res) => {
 //------------------------------------------------------------------------------------------------
 // API to delete a flight by ID from adminDash
 app.delete('/api/delete-flight/:id', (req, res) => {
-  const flightId = req.params.id; // Get the flight_id from the URL parameters
+  const flightId = req.params.id;
 
   // Validate the input
   if (!flightId || isNaN(flightId)) {
@@ -660,182 +652,13 @@ app.post('/api/searched-flight-card', (req, res) => {
 });
 
 //-------------------------------------------------------------------------------------------
-
-//Update your ticket purchasing or reservation endpoint to use the authentication middleware:
-
-// app.post('/api/reservations', isAuthenticated, (req, res) => {
-//   const { flight_id, total_amount } = req.body;
-//   const user_id = req.session.user.id; // Use logged-in user's ID
-
-//   const query = `
-//     INSERT INTO Reservations (user_id, flight_id, total_amount, status)
-//     VALUES (?, ?, ?, 'pending')`;
-//   db.query(query, [user_id, flight_id, total_amount], (err, result) => {
-//     if (err) return res.status(500).json({ error: 'Error booking reservation' });
-//     res.status(201).json({ message: 'Reservation booked successfully', reservation_id: result.insertId });
-//   });
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Route to handle flight booking with Book now 
-
-
-
-
-// app.post('/api/book-flight', (req, res) => {
-//   //Ensure the user is logged in by checking session
-//   console.log(req.session.user);
-//   if (!req.session.user) {
-//     return res.status(401).json({ success: false, message: 'User not authenticated' });
-//   }
-
-//   const userId = req.session.user.userId; // Get userId from session
-
-
-//   //const userId = 1;//extra added for testing
-//   const { flight_id } = req.body;
-
-//   // Query to check available seats for the flight
-//   const checkAvailabilityQuery = 'SELECT seats_available, price FROM Flights WHERE flight_id = ?';
-//   db.query(checkAvailabilityQuery, [flight_id], (err, result) => {
-//     if (err) {
-//       console.error('Error checking availability:', err);
-//       return res.status(500).json({ success: false, message: 'Database error' });
-//     }
-
-//     if (result.length === 0 || result[0].seats_available <= 0) {
-//       return res.status(400).json({ success: false, message: 'Flight not available or fully booked.' });
-//     }
-
-//     // Proceed with booking the flight
-//     const bookingQuery = 'INSERT INTO Reservations (user_id, flight_id, booking_date, status, total_amount) VALUES (?, ?, NOW(), ?, ?)';
-//     const totalAmount = result[0].price; // Fetch price from the flight query
-//     const status = 'confirmed'; // Assuming confirmed booking status
-
-//     db.query(bookingQuery, [userId, flight_id, status, totalAmount], (err, result) => {
-//       if (err) {
-//         console.error('Error booking flight:', err);
-//         return res.status(500).json({ success: false, message: '1' });
-//       }
-
-//       // Decrease available seats in Flights table
-//       const updateSeatsQuery = 'UPDATE Flights SET seats_available = seats_available - 1 WHERE flight_id = ?';
-//       db.query(updateSeatsQuery, [flight_id], (err, result) => {
-//         if (err) {
-//           console.error('Error updating available seats:', err);
-//           return res.status(500).json({ success: false, message: 'Failed to update available seats' });
-//         }
-
-//         return res.status(200).json({ success: true, message: 'Flight booked successfully' });
-//       });
-//     });
-//   });
-// });
-
-
-
-
-
-
-//PDF generate korar jonno booking funtionality niye test kortesi 
-// app.post('/api/book-flight', (req, res) => {
-//   console.log(req.session.user);
-//   if (!req.session.user) {
-//     return res.status(401).json({ success: false, message: 'User not authenticated' });
-//   }
-
-//   const userId = req.session.user.userId;
-//   const { flight_id } = req.body;
-
-//   // Query to check available seats
-//   const checkAvailabilityQuery = 'SELECT * FROM Flights WHERE flight_id = ?';
-//   db.query(checkAvailabilityQuery, [flight_id], (err, result) => {
-//     if (err) {
-//       console.error('Error checking availability:', err);
-//       return res.status(500).json({ success: false, message: 'Database error' });
-//     }
-
-//     if (result.length === 0 || result[0].seats_available <= 0) {
-//       return res.status(400).json({ success: false, message: 'Flight not available or fully booked.' });
-//     }
-
-//     // Proceed with booking
-//     const totalAmount = result[0].price;
-//     const status = 'confirmed';
-//     const bookingQuery = 'INSERT INTO Reservations (user_id, flight_id, booking_date, status, total_amount) VALUES (?, ?, NOW(), ?, ?)';
-
-//     db.query(bookingQuery, [userId, flight_id, status, totalAmount], (err, result) => {
-//       if (err) {
-//         console.error('Error booking flight:', err);
-//         return res.status(500).json({ success: false, message: 'Booking failed' });
-//       }
-
-//       const reservationId = result.insertId; // Get the new reservation ID
-
-//       // Fetch the booked flight details
-//       const fetchBookingQuery = `
-//         SELECT r.reservation_id, r.booking_date, r.status, f.flight_number, f.origin, 
-//                f.destination, f.departure_time, f.arrival_time, f.price
-//         FROM Reservations r
-//         JOIN Flights f ON r.flight_id = f.flight_id
-//         WHERE r.reservation_id = ?`;
-
-//       db.query(fetchBookingQuery, [reservationId], (err, bookingResult) => {
-//         if (err) {
-//           console.error('Error fetching booking details:', err);
-//           return res.status(500).json({ success: false, message: 'Error fetching booking details' });
-//         }
-
-//         if (bookingResult.length > 0) {
-//           req.session.latestBooking = bookingResult[0]; // Store latest booking in session
-//         }
-
-//         // Update available seats
-//         const updateSeatsQuery = 'UPDATE Flights SET seats_available = seats_available - 1 WHERE flight_id = ?';
-//         db.query(updateSeatsQuery, [flight_id], (err) => {
-//           if (err) {
-//             console.error('Error updating available seats:', err);
-//             return res.status(500).json({ success: false, message: 'Failed to update available seats' });
-//           }
-
-//           return res.status(200).json({ success: true, message: 'Flight booked successfully' });
-//         });
-//       });
-//     });
-//   });
-// });
-
-
-
-
 app.post('/api/book-flight', (req, res) => {
   // Ensure the user is logged in
   if (!req.session.user) {
     return res.status(401).json({ success: false, message: 'User not authenticated' });
   }
 
-  const userId = req.session.user.userId; // Get userId from session
+  const userId = req.session.user.userId;
   const { flight_id } = req.body;
 
   // Query to get flight details
@@ -852,8 +675,8 @@ app.post('/api/book-flight', (req, res) => {
 
     // Proceed with booking the flight
     const bookingQuery = 'INSERT INTO Reservations (user_id, flight_id, booking_date, status, total_amount) VALUES (?, ?, NOW(), ?, ?)';
-    const totalAmount = flightResult[0].price; // Get price from the flight details
-    const status = 'confirmed'; // Assuming confirmed booking status
+    const totalAmount = flightResult[0].price; 
+    const status = 'confirmed'; 
 
     db.query(bookingQuery, [userId, flight_id, status, totalAmount], (err, bookingResult) => {
       if (err) {
@@ -874,7 +697,7 @@ app.post('/api/book-flight', (req, res) => {
         price: totalAmount
       };
 
-      console.log('Booking successful:', req.session.latestBooking); // Log session data for debugging
+      console.log('Booking successful:', req.session.latestBooking); 
 
       // Decrease available seats in Flights table
       const updateSeatsQuery = 'UPDATE Flights SET seats_available = seats_available - 1 WHERE flight_id = ?';
@@ -883,7 +706,6 @@ app.post('/api/book-flight', (req, res) => {
           console.error('Error updating available seats:', err);
           return res.status(500).json({ success: false, message: 'Failed to update available seats' });
         }
-
         return res.status(200).json({ success: true, message: 'Flight booked successfully' });
       });
     });
@@ -900,44 +722,16 @@ app.post('/api/book-flight', (req, res) => {
 
 // Update flight details.
 app.put('/api/flights/:id', (req, res) => {
-  const { id } = req.params; // Gets the flight ID from route parameters.
-  const { origin, destination, departure_time, arrival_time, price, seats_available } = req.body; // Extracts flight data from the request body.
-
+  const { id } = req.params; 
+  const { origin, destination, departure_time, arrival_time, price, seats_available } = req.body; 
   const query =
     'UPDATE Flights SET origin = ?, destination = ?, departure_time = ?, arrival_time = ?, price = ?, seats_available = ? ' +
     'WHERE flight_id = ?';
-
-  // Executes the query to update flight details.
   db.query(query, [origin, destination, departure_time, arrival_time, price, seats_available, id], (err, result) => {
-    if (err) return res.status(500).json({ error: 'Error updating flight' }); // Handles query errors.
-    res.status(200).json({ message: 'Flight updated successfully' }); // Sends success response if update is successful.
+    if (err) return res.status(500).json({ error: 'Error updating flight' }); 
+    res.status(200).json({ message: 'Flight updated successfully' }); 
   });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Start the server
 app.listen(port, () => {
