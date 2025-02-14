@@ -4,8 +4,8 @@ const mysql = require('mysql');
 // Create the connection
 const db = mysql.createConnection({
   host: 'localhost',  
-  user: 'meherab',    
-  password: 'meherab@7577',  
+  user: 'batman',    
+  password: 'batman1234',  
   database: 'airline_reservation_system'
 });
 db.connect((err) => {
