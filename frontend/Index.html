@@ -28,7 +28,7 @@
       <button onclick="showLandingPage()">Home</button>
       <button onclick="showRegisterForm()">Register</button>
       <button onclick="showLoginForm()">Login</button>
-     <!-- <button onclick="showSearchFlightsForm()">Search Flights</button>
+      <!-- <button onclick="showSearchFlightsForm()">Search Flights</button>
       <button onclick="showAddFlightForm()">Add Flight</button>-->
     </nav>
 
@@ -128,22 +128,6 @@
       </form>
     </div>
 
-
-
-
-
-
-
-    <!-- Login Form 
-    <form action="\login" method="post">
-      <div id="login-form" class="form-container" style="display: none;">
-        <h3>Login</h3>
-
-        <input type="email" id="login_email" placeholder="Email" required>
-        <input type="password" id="login_password" placeholder="Password" required>
-        <button type="submit">Login</button>
-    </form>-->
-
     <!-- Login Form -->
     <div id="login-form" class="form-container" style="display: none;">
       <h3>Login</h3>
@@ -152,136 +136,6 @@
         <input type="password" id="login_password" name="password" placeholder="Password" required>
         <button type="submit">Login</button>
       </form>
-
-
-
-
-      <!-- <script>
-        document.getElementById('login').addEventListener('submit', (event) => {
-          event.preventDefault();
-
-          // Get the input values from the form
-          const email = document.getElementById('login_email').value;
-          const password = document.getElementById('login_password').value;
-
-          // Perform login request to the backend
-          fetch('http://127.0.0.1:3000/login', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, pass: password }),  // Send the email and password
-          })
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Login failed');
-              }
-              return response.json(); // Parse the JSON response
-            })
-            .then(data => {
-              if (data.success) {
-                // If login is successful, backend will handle the redirection
-                alert(data.message || 'Login successful!');
-                window.location.href = '/dashboard';  // Now redirect to dashboard manually
-              } else {
-                alert(data.message || 'Invalid email or password.');
-              }
-            })
-            .catch(error => {
-              // Handle errors like network issues or login failure
-              console.error('Login error:', error);
-              alert('Error occurred while logging in. Please try again.');
-            });
-        });
-
-      </script>-->
-
-
-      <!-- <script>
-        document.getElementById('login').addEventListener('submit', async function (event) {
-          event.preventDefault(); // Prevent the form from submitting normally
-
-          // Get the values from the form
-          const email = document.getElementById('login_email').value; // Match the email input ID from your HTML
-          const pass = document.getElementById('login_password').value; // Match the password input ID from your HTML
-
-          try {
-            // Send a POST request to the backend with email and password
-            const response = await fetch('http://127.0.0.1:3000/login', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ email, pass }), // Send the email and password as JSON
-            });
-
-            // Handle the response from the server
-            // if (response.ok) {
-            //   // If login is successful, the server will handle the redirection.
-            //   // If the backend doesn't handle it, you can do it manually by redirecting here.
-            //   // Backend might already redirect, so it's not necessary to manually set location.href.
-            //   alert(data.message || 'Login successful!');
-            // } 
-            if (data.success) {
-              // If login is successful, show a popup and redirect
-              alert(data.message || 'Login successful!');
-              window.location.href = '/dashboard'; // Redirect to the dashboard
-            }
-            else {
-              // If login failed, show an error message
-              const errorMessage = await response.json();
-              document.getElementById('errorMessage').innerText = errorMessage.message || 'Invalid email or password.';
-              document.getElementById('errorMessage').style.display = 'block'; // Display error message
-            }
-          } catch (error) {
-            console.error('Error during login:', error);
-            // Show a generic error message
-            document.getElementById('errorMessage').innerText = 'An error occurred during login. Please try again.';
-            document.getElementById('errorMessage').style.display = 'block'; // Display error message
-          }
-        });
-      </script>-->
-
-      <!--  <script>
-        // Handles login form submission and logs the user in
-        document.getElementById('login').addEventListener('submit', function (event) {
-          event.preventDefault(); // Prevent default form submission
-
-          const email = document.getElementById('login_email').value; // Get the email input value
-          const password = document.getElementById('login_password').value; // Get the password input value
-
-          // Simulate a fetch request (replace '/login' with your actual backend login endpoint)
-          fetch('http://127.0.0.1:3000/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, pass: password }),// Send login data as JSON
-            credentials: 'include', // Include cookies (session)
-          })
-            .then(response => {
-              if (response.redirected) {
-                window.location.href = response.url; // Redirect to the next page on success
-              } else {
-                return response.json().then(data => {
-                  alert(`Login failed: ${data.message}`); // Show an error message on failure
-                });
-              }
-            })
-            .catch(error => {
-              console.error('Error:', error); // Log any network or fetch errors
-            });
-        });
-
-        // Example: Function to show/hide the login form (if needed)
-        // function toggleLoginForm() {
-        //   const loginForm = document.getElementById('login-form');
-        //   loginForm.style.display = loginForm.style.display === 'none' ? 'block' : 'none';
-        // }
-
-        // You can call toggleLoginForm() to show the form dynamically when required
-      </script>-->
-
-
-
   </section>
 
 
@@ -438,74 +292,7 @@
       </form>
     </div>
   </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <script src="app.js"></script>
-  <!-- Add this script here 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const loginForm = document.getElementById("login");
-      const emailInput = document.getElementById("login_email");
-      const passwordInput = document.getElementById("login_password");
-
-      loginForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        const email = emailInput.value.trim();
-        const pass = passwordInput.value.trim();
-
-        if (!email || !pass) {
-          alert("Please fill in both email and password.");
-          return;
-        }
-
-        try {
-          const response = await fetch("http://localhost:3000/login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, pass }),
-            credentials: "include",
-          });
-
-          if (response.redirected) {
-            window.location.href = response.url;
-          } else if (response.ok) {
-            const data = await response.json();
-            alert(data.message);
-          } else {
-            const error = await response.json();
-            alert(error.message || "An unknown error occurred.");
-          }
-        } catch (err) {
-          console.error("Error during login:", err);
-          alert("Failed to login. Please try again.");
-        }
-      });
-    });
-  </script>-->
-
-
-
+<script src="app.js"></script>
 </body>
 <script>
 
