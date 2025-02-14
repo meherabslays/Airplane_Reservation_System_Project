@@ -27,10 +27,14 @@
     <div class="dashboard">
         <!-- Profile Information -->
         <section class="profile-info">
-            <h2>Welcome, <span id="userName">Loading...</span></h2>
+            <h2>Welcome, <span id="userName">Loading...</span>! 🎉</h2>
             <p>Email: <span id="userEmail">Loading...</span></p>
             <p>Phone: <span id="userPhone">Loading...</span></p>
+            <p class="cheesy-line">✈️ Buckle up! Your next adventure starts here. 🌍✨</p>
+            <p class="cheesy-line">🌟 Fasten your seatbelt, because smooth travels await you! 🛫</p>
+            <p class="cheesy-line">💙 Thank you for choosing Astra Flights—your journey, our joy! ☁️</p>
         </section>
+
 
         <!-- Booking Management -->
         <section class="booking-management">
@@ -60,51 +64,6 @@
 
     <!-- Embedded JavaScript -->
     <script>
-        // Fetch Profile Information
-        function fetchProfile() {
-            fetch('/api/profile', { method: 'GET', credentials: 'include' })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('userName').innerText = data.name;
-                    document.getElementById('userEmail').innerText = data.email;
-                    document.getElementById('userPhone').innerText = data.phone;
-                })
-                .catch(error => {
-                    console.error('Error fetching profile:', error);
-                });
-        }
-
-        // Fetch Booking Information
-        function fetchBookings() {
-            fetch('/api/bookings', { method: 'GET', credentials: 'include' })
-                .then(response => response.json())
-                .then(data => {
-                    const tableBody = document.querySelector('#bookingTable tbody');
-                    tableBody.innerHTML = ''; // Clear loading message
-                    if (data.length === 0) {
-                        tableBody.innerHTML = '<tr><td colspan="5">No bookings found.</td></tr>';
-                    } else {
-                        data.forEach(booking => {
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>${booking.flightNumber}</td>
-                                <td>${booking.route}</td>
-                                <td>${booking.date}</td>
-                                <td>${booking.status}</td>
-                                <td>
-                                    <button onclick="modifyBooking(${booking.id})">Modify</button>
-                                    <button onclick="cancelBooking(${booking.id})">Cancel</button>
-                                </td>
-                            `;
-                            tableBody.appendChild(row);
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching bookings:', error);
-                });
-        }
-
         // Modify Booking
         function modifyBooking(bookingId) {
             const confirmation = confirm('Do you want to modify this booking?');
@@ -135,9 +94,17 @@
 
         // Logout Functionality
         function logout() {
-            fetch('/api/logout', { method: 'POST', credentials: 'include' })
-                .then(() => {
-                    window.location.href = 'index.html';
+            fetch('http://127.0.0.1:3000/api/logout', {
+                method: 'POST',
+                credentials: 'include'  // Ensure the session cookie is sent with the request
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Redirect to the login page after successful logout
+                        window.location.href = 'index.html';
+                    } else {
+                        console.error('Failed to log out');
+                    }
                 })
                 .catch(error => {
                     console.error('Error logging out:', error);
@@ -150,11 +117,140 @@
             window.location.href = 'index2.html';  // Redirect to index2.html
         }
 
-        // // Initialize Dashboard
-        // document.addEventListener('DOMContentLoaded', () => {
-        //     fetchProfile();
-        //     fetchBookings();
-        // });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fetch session data from the server to check if the user is logged in
+            fetch('http://127.0.0.1:3000/api/check-session-1', {
+                method: 'GET',
+                credentials: 'include',  // Ensure session cookie is sent with the request
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Session data:', data);
+
+                    if (data.user) {
+                        console.log('User is logged in:', data.user.username);
+
+                        // Fetch the user profile data from the server
+                        return fetch('http://127.0.0.1:3000/api/profile', {
+                            method: 'GET',
+                            credentials: 'include' // Ensure session cookies are sent
+                        })
+                            .then(response => response.json())
+                            .then(profileData => {
+                                // Check if the data is returned correctly
+                                console.log('Profile data:', profileData);
+
+                                // Update the HTML elements with the user profile data
+                                document.getElementById('userName').innerText = profileData.username;
+                                document.getElementById('userEmail').innerText = profileData.email;
+                                document.getElementById('userPhone').innerText = profileData.phone || 'N/A'; // Handle missing phone
+
+                                // Now fetch the booked flights based on the logged-in user
+                                return fetch('http://127.0.0.1:3000/api/get-bookings', {
+                                    method: 'GET',
+                                    credentials: 'include',  // Ensure session cookie is sent
+                                });
+                            })
+                            .then(response => response.json())
+                            .then(bookingsData => {
+                                // Check if bookings data is returned correctly
+                                console.log('Bookings API Response for checking:', bookingsData);  // Debugging line
+
+                                if (bookingsData.bookings && bookingsData.bookings.length > 0) {
+                                    const bookings = bookingsData.bookings;
+                                    const tableBody = document.querySelector('#bookingTable tbody');
+                                    tableBody.innerHTML = '';  // Clear loading message
+
+                                    bookings.forEach(booking => {
+                                        const row = document.createElement('tr');
+                                        row.innerHTML = `
+                                <td>${booking.flight_number}</td>
+                                <td>${booking.origin} - ${booking.destination}</td>
+                                <td>${new Date(booking.booking_date).toLocaleString()}</td>
+                                <td>${booking.status}</td>
+                                <td>
+                                    <button onclick="cancelBooking(${booking.reservation_id})">Cancel</button>
+                                </td>
+                            `;
+                                        tableBody.appendChild(row);
+                                    });
+                                } else {
+                                    console.log('No bookings found.');
+                                    // Optional: Display a message to indicate no bookings found
+                                    document.querySelector('#bookingTable tbody').innerHTML = '<tr><td colspan="5">No bookings found.</td></tr>';
+                                }
+                            })
+                            .catch(error => console.error('Error fetching bookings:', error));
+                    } else {
+                        console.log('User is not logged in');
+                        return Promise.reject('User not logged in'); // Stop further execution
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        // Function to handle cancellation (you can modify this function to cancel a booking)
+        function cancelBooking(reservationId) {
+            console.log(`Cancel booking with ID: ${reservationId}`);
+
+            fetch('http://127.0.0.1:3000/api/cancel-booking', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ reservationId }),
+                credentials: 'include'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.message);
+
+                    if (data.message === 'Reservation cancelled successfully') {
+                        alert('Booking cancelled successfully.');
+                        location.reload(); // Refresh page to update booking list
+                    } else {
+                        alert('Error cancelling booking: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error cancelling booking:', error);
+                    alert('Failed to cancel booking.');
+                });
+        }
+
+
     </script>
 </body>
 
